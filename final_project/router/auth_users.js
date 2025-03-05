@@ -13,6 +13,24 @@ const authenticatedUser = (username,password)=>{ //returns boolean
 //write code to check if username and password match the one we have in records.
 }
 
+regd_users.post("/register", (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+
+  if(!username || !password){
+    return res.status(404).json({message: "Unable to register user. Missed username or password!"});
+  }
+  if(users.filter((u) => u.username === username).length > 0){
+    return res.status(404).json({message: `User ${username} already exists!`});
+  }
+  
+  users.push({
+    "username": username,
+    "password": password
+  });
+  return res.status(200).json({message: "User successfully registered. Now you can login"});
+})
+
 //only registered users can login
 regd_users.post("/login", (req,res) => {
   //Write your code here
