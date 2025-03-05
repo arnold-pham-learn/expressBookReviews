@@ -54,7 +54,7 @@ public_users.get('/author/:author',function (req, res) {
   }else{
     res.send("Please input author to find book");
   }
-  return res.status(300).json({message: "Yet to be implemented"});
+  // return res.status(300).json({message: "Yet to be implemented"});
 });
 
 // Get all books based on title
