@@ -91,6 +91,29 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
   // return res.status(300).json({message: "Yet to be implemented"});
 });
 
+// delete a book review
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+  //Write your code here
+  const isbn = req.params.isbn;
+  if(isbn){
+    let existBook = books[isbn];
+    if(existBook){
+      const userName = req.session.authenication["userName"];
+      if(books[isbn]["reviews"][userName]){
+        delete books[isbn]["reviews"][userName];
+        return res.status(200).send("Your review has deleted!");
+      }else{
+        return res.status(404).json({ message: `User ${userName} have no reviews` });
+      }
+    }else{
+      res.send(`Not found book with ISBN: ${isbn}`);
+    }
+  }else{
+    res.send("Please input ISBN to leave a book's review");
+  }
+  // return res.status(300).json({message: "Yet to be implemented"});
+});
+
 module.exports.authenticated = regd_users;
 module.exports.isValid = isValid;
 module.exports.users = users;
