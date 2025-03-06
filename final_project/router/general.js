@@ -109,6 +109,19 @@ public_users.get('/author/:author',function (req, res) {
   // return res.status(300).json({message: "Yet to be implemented"});
 });
 
+// Get book details based on title
+public_users.get('/title/async/:title',function (req, res) {
+  //Write your code here
+  const title = req.params.title;
+  axios.get(`${req.protocol}:${req.headers.host}/title/${title}`)
+    .then(result => {
+      res.send(JSON.stringify(result.data, null, 4));
+    })
+    .catch(error => {
+      res.send(error);
+    })
+});
+
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
   //Write your code here
