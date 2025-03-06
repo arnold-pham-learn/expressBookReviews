@@ -1,5 +1,6 @@
 const express = require('express');
 let books = require("./booksdb.js");
+const axios = require('axios');
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
@@ -71,6 +72,19 @@ public_users.get('/isbn/:isbn',function (req, res) {
     res.send("Please input ISBN to find book");
   }
  });
+
+ // Get book details based on author
+public_users.get('/author/async/:author',function (req, res) {
+  //Write your code here
+  const author = req.params.author;
+  axios.get(`${req.protocol}:${req.headers.host}/author/${author}`)
+    .then(result => {
+      res.send(JSON.stringify(result.data, null, 4));
+    })
+    .catch(error => {
+      res.send(error);
+    })
+});
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
