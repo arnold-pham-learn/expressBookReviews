@@ -12,20 +12,29 @@ public_users.post("/register", (req,res) => {
 });
 
 // Get the book list available in the shop
-const getAllBooks = new Promise((revolve, reject) => {
+// const getAllBooks = new Promise((revolve, reject) => {
+//   try{
+//     revolve(books);
+//   } catch(error){
+//     reject(error);
+//   }
+// });
+function getAllBooks(){
   try{
-    revolve(books);
+    return books;
   } catch(error){
-    reject(error);
+    return null;
   }
-});
+}
 // API Get all book by ptomises
-public_users.get('/async/',function (req, res) {
+public_users.get('/async/', async function (req, res) {
   //Write your code here
+  const allBooks = await getAllBooks();
+  return res.status(200).send(JSON.stringify(allBooks, null, 4));
   // res.send(JSON.stringify(books, null, 4));
-  getAllBooks.then((data) => {
-      return res.status(200).send(JSON.stringify(data, null, 4));
-  });
+  // getAllBooks.then((data) => {
+  //     return res.status(200).send(JSON.stringify(data, null, 4));
+  // });
   // return res.status(300).json({message: "Yet to be implemented"});
 });
 
@@ -38,23 +47,35 @@ public_users.get('/',function (req, res) {
 });
 
 // Get the book  by isbn in the shop
-function getBookByISBN(isbn){
-  if(isbn){
-    return books[isbn];
-  }else{
-    return null;
-  }
+const getBookByISBN = (isbn) => {
+  return new Promise((revolve, reject) => {
+    if(isbn){
+      revolve(books[isbn]);
+    }else{
+      reject("Please input ISBN to find book");
+    }
+  });
 };
+// function getBookByISBN(isbn){
+//   if(isbn){
+//     return books[isbn];
+//   }else{
+//     return null;
+//   }
+// };
 // Get book details based on ISBN
 public_users.get('/isbn/async/:isbn',async function (req, res) {
   //Write your code here
   const isbn = req.params.isbn;
-  const book = await getBookByISBN(isbn);
-  if(book){
-    res.status(200).send(JSON.stringify(book, null, 4));
-  }else{
-    res.send(`Not found book with ISBN: ${isbn}`);
-  }
+  getBookByISBN(isbn).then((data) => {
+      return res.status(200).send(JSON.stringify(data, null, 4));
+  });
+  // const book = await getBookByISBN(isbn);
+  // if(book){
+  //   res.status(200).send(JSON.stringify(book, null, 4));
+  // }else{
+  //   res.send(`Not found book with ISBN: ${isbn}`);
+  // }
  });
 
 // Get book details based on ISBN
