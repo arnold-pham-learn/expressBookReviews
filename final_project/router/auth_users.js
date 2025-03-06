@@ -52,11 +52,11 @@ regd_users.post("/login", (req,res) => {
     return res.status(404).json({message: "Unable to login user. Missed username or password!"});
   }
   let user = authenticatedUser(username, password);
-  console.log(user.username);
   if(user){
-    let token = jwt.sign({data: password}, 'cpZSR2TaZUlonj5X3EPqg7mxApDKh5wu', {expiresIn: 60*60});
+    let accessToken = jwt.sign({data: password}, 'cpZSR2TaZUlonj5X3EPqg7mxApDKh5wu', {expiresIn: 60*60});
     req.session.authenication = {
-      token, username
+      "accessToken": accessToken, 
+      "userName": username
     };
     return res.status(200).send("User successfully logged in");
   }
