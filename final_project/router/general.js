@@ -36,6 +36,26 @@ public_users.get('/',function (req, res) {
   // return res.status(300).json({message: "Yet to be implemented"});
 });
 
+// Get the book  by isbn in the shop
+function getBookByISBN(isbn){
+  if(isbn){
+    return books[isbn];
+  }else{
+    return null;
+  }
+};
+// Get book details based on ISBN
+public_users.get('/isbn/async/:isbn',async function (req, res) {
+  //Write your code here
+  const isbn = req.params.isbn;
+  const book = await getBookByISBN(isbn);
+  if(book){
+    res.status(200).send(JSON.stringify(book, null, 4));
+  }else{
+    res.send(`Not found book with ISBN: ${isbn}`);
+  }
+ });
+
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
   //Write your code here
