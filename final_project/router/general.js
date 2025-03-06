@@ -11,6 +11,24 @@ public_users.post("/register", (req,res) => {
 });
 
 // Get the book list available in the shop
+const getAllBooks = new Promise((revolve, reject) => {
+  try{
+    revolve(books);
+  } catch(error){
+    reject(error);
+  }
+});
+// API Get all book by ptomises
+public_users.get('/async/',function (req, res) {
+  //Write your code here
+  // res.send(JSON.stringify(books, null, 4));
+  getAllBooks.then((data) => {
+      return res.status(200).send(JSON.stringify(data, null, 4));
+  });
+  // return res.status(300).json({message: "Yet to be implemented"});
+});
+
+// Get the book list available in the shop
 public_users.get('/',function (req, res) {
   //Write your code here
   res.send(JSON.stringify(books, null, 4));
